@@ -126,25 +126,19 @@ class TestAccountService(TestCase):
     def test_read_an_account(self):
         """It should return a known account"""
         # create account for the test case
-        account = AccountFactory()
-        response = self.client.post(
-            BASE_URL,
-            json=account.serialize(),
-            content_type="application/json"
-        )
-        new_account = response.get_json()
-        id = new_account['id']
+        accounts = self._create_accounts(1)
+        account = accounts[0]
         response = self.client.get(
-            BASE_URL + "/" + str(id)
+            BASE_URL + "/" + str(account.id)
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         read_account = response.get_json()
-        self.assertEqual(read_account['id'], new_account['id'])
-        self.assertEqual(read_account['name'], new_account['name'])
-        self.assertEqual(read_account['email'], new_account['email'])
-        self.assertEqual(read_account['address'], new_account['address'])
-        self.assertEqual(read_account['phone_number'], new_account['phone_number'])
-        self.assertEqual(read_account['date_joined'], new_account['date_joined'])
+        self.assertEqual(read_account['id'], account.id)
+        self.assertEqual(read_account['name'], account.name)
+        self.assertEqual(read_account['email'], account.email)
+        self.assertEqual(read_account['address'], account.address)
+        self.assertEqual(read_account['phone_number'], account.phone_number)
+        self.assertEqual(read_account['date_joined'], str(account.date_joined))
     
     def test_account_not_found(self):
         """It should return a not found message for an unknown account"""
