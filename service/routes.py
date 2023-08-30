@@ -75,7 +75,7 @@ def read_account(id):
     Take given id and returns the account. If id is not found it
     returns 404 - not found.
     """
-    app.logger.info("Request to read an Account")
+    app.logger.info("Request to read an Account for id %s", id)
     account = Account.find(id)
     if not account is None:
         message = account.serialize()
@@ -109,7 +109,17 @@ def update_account(account_id):
 # DELETE AN ACCOUNT
 ######################################################################
 
-# ... place you code here to DELETE an account ...
+@app.route("/accounts/<account_id>", methods=["DELETE"])
+def delete_account(account_id):
+    """
+    Delete an account
+    Take given account_id and delete the account if it's found
+    """
+    app.logger.info("Request to delete an Account with id %s", account_id)
+    account = Account.find(account_id)
+    if not account is None:
+        account.delete()
+        return ('', status.HTTP_204_NO_CONTENT)
 
 
 ######################################################################
