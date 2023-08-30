@@ -146,3 +146,30 @@ class TestAccountService(TestCase):
             BASE_URL + "/" + str(0)
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_update_account(self):
+        """It should update an account with given payload"""
+        # create account for the test case
+        accounts = self._create_accounts(1)
+        account = accounts[0]
+        response = self.client.put(
+            BASE_URL + "/" + str(account.id),
+            json=account.serialize(),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # Check the data is correct
+        updated_account = response.get_json()
+        self.assertEqual(updated_account["id"], account.id)
+        self.assertEqual(updated_account["name"], account.name)
+        self.assertEqual(updated_account["email"], account.email)
+        self.assertEqual(updated_account["address"], account.address)
+        self.assertEqual(updated_account["phone_number"], account.phone_number)
+        self.assertEqual(updated_account["date_joined"], str(account.date_joined))
+
+    def test_update_account_not_found(self):
+        """It should return a not found message for an unknown account when updating"""
+        response = self.client.put(
+            BASE_URL + "/" + str(0)
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
