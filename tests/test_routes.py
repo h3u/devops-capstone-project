@@ -189,3 +189,34 @@ class TestAccountService(TestCase):
             BASE_URL + "/" + str(account.id)
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_account_list(self):
+        """It should Get a list of Accounts"""
+        amount_accounts = 5
+        self._create_accounts(amount_accounts)
+        # send a self.client.get() request to the BASE_URL
+        response = self.client.get(BASE_URL)
+        # assert that the resp.status_code is status.HTTP_200_OK
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # get the data from resp.get_json()
+        data = response.get_json()
+        # assert that the len() of the data is 5 (the number of accounts you created)
+        self.assertEqual(len(data), amount_accounts)
+
+    def test_get_account_list_empty(self):
+        """It should Get an empty list if there are no Accounts yet"""
+        # send a self.client.get() request to the BASE_URL
+        response = self.client.get(BASE_URL)
+        # assert that the resp.status_code is status.HTTP_200_OK
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # get the data from resp.get_json()
+        data = response.get_json()
+        # assert that the len() of the data is 5 (the number of accounts you created)
+        self.assertEqual(len(data), 0)
+
+    def test_method_not_allowed(self):
+        """It should not allow an illegal method call"""
+        # call self.client.delete() on the BASE_URL
+        response = self.client.delete(BASE_URL)
+        # assert that the resp.status_code is status.HTTP_405_METHOD_NOT_ALLOWED
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
