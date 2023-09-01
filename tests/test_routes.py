@@ -139,7 +139,7 @@ class TestAccountService(TestCase):
         self.assertEqual(read_account['address'], account.address)
         self.assertEqual(read_account['phone_number'], account.phone_number)
         self.assertEqual(read_account['date_joined'], str(account.date_joined))
-    
+
     def test_account_not_found(self):
         """It should return a not found message for an unknown account"""
         response = self.client.get(

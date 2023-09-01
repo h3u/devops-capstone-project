@@ -61,6 +61,7 @@ def create_accounts():
 # LIST ALL ACCOUNTS
 ######################################################################
 
+
 @app.route("/accounts", methods=["GET"])
 def list_accounts():
     """
@@ -87,6 +88,7 @@ def list_accounts():
 # READ AN ACCOUNT
 ######################################################################
 
+
 @app.route("/accounts/<id>", methods=["GET"])
 def read_account(id):
     """
@@ -96,16 +98,17 @@ def read_account(id):
     """
     app.logger.info("Request to read an Account for id %s", id)
     account = Account.find(id)
-    if not account is None:
+    if account is not None:
         message = account.serialize()
         return make_response(
             jsonify(message), status.HTTP_200_OK
         )
-    abort (status.HTTP_404_NOT_FOUND)
+    abort(status.HTTP_404_NOT_FOUND)
 
 ######################################################################
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
+
 
 @app.route("/accounts/<account_id>", methods=["PUT"])
 def update_account(account_id):
@@ -116,17 +119,18 @@ def update_account(account_id):
     """
     app.logger.info("Request to update an Account with id %s", account_id)
     account = Account.find(account_id)
-    if not account is None:
+    if account is not None:
         account.deserialize(request.get_json())
         return make_response(
             jsonify(account.serialize()), status.HTTP_200_OK
         )
 
-    abort (status.HTTP_404_NOT_FOUND)
+    abort(status.HTTP_404_NOT_FOUND)
 
 ######################################################################
 # DELETE AN ACCOUNT
 ######################################################################
+
 
 @app.route("/accounts/<account_id>", methods=["DELETE"])
 def delete_account(account_id):
@@ -136,7 +140,8 @@ def delete_account(account_id):
     """
     app.logger.info("Request to delete an Account with id %s", account_id)
     account = Account.find(account_id)
-    if not account is None:
+
+    if account is not None:
         account.delete()
         return ('', status.HTTP_204_NO_CONTENT)
 
